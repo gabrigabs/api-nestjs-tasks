@@ -1,6 +1,7 @@
 import { User } from '@prisma/client';
 
 export interface UsersRepositoryInterface {
-  addUser(data: { email: string; password: string }): Promise<User>;
-  getUsers(): Promise<User[]>;
+  createUser(data: { email: string; password: string }): Promise<User>;
+  findUsers(): Promise<User[]>;
+  findUserByParams(params: Partial<User>): Promise<User | null>;
 }

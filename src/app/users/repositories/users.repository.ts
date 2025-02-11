@@ -7,8 +7,8 @@ import { PrismaService } from '../../prisma/services/prisma.service';
 export class UsersRepository implements UsersRepositoryInterface {
   constructor(private prisma: PrismaService) {}
 
-  async addUser(data: { email: string; password: string }): Promise<User> {
-    return await this.prisma.user.create({
+  async createUser(data: { email: string; password: string }): Promise<User> {
+    return this.prisma.user.create({
       data: {
         email: data.email,
         password: data.password,
@@ -16,7 +16,11 @@ export class UsersRepository implements UsersRepositoryInterface {
     });
   }
 
-  async getUsers(): Promise<User[]> {
-    return await this.prisma.user.findMany();
+  async findUsers(): Promise<User[]> {
+    return this.prisma.user.findMany();
+  }
+
+  async findUserByParams(params: Partial<User>): Promise<User | null> {
+    return this.prisma.user.findFirst({ where: params });
   }
 }
