@@ -21,6 +21,7 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/tsconfig.json ./tsconfig.json
+COPY --from=builder /app/prisma ./prisma
 
 ARG NODE_ENV=development
 ENV NODE_ENV=${NODE_ENV}
@@ -32,6 +33,7 @@ FROM node:22-alpine AS production
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/prisma ./prisma
 
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}

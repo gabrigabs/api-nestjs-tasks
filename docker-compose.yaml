@@ -7,8 +7,9 @@ services:
     volumes:
       - .:/app
     restart: always
+    command: sh -c "npm run prisma:generate && npm run prisma:migrate && npm run start:dev"
     ports:
-      - 3000:3000
+      - ${PORT}:${PORT}
     depends_on:
       - postgres
     networks:
@@ -18,14 +19,12 @@ services:
   postgres:
     image: postgres
     restart: always
-    environment:
-      POSTGRES_PASSWORD: 'docker'
-      POSTGRES_USER: 'docker'
-      POSTGRES_DB: tasksdb
     ports:
       - '5432:5432'
     networks:
       - postgres-network
+    env_file:
+      - .env
 
 networks:
   postgres-network:
