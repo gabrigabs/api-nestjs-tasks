@@ -12,10 +12,7 @@ export class AuthController {
 
   @UseGuards(UserAuthGuard)
   @Post('sign-in')
-  async signIn(
-    @Body() body: UserDto,
-    @UserSession() user: User,
-  ): Promise<UserLoginResponse> {
+  async signIn(@UserSession() user: User): Promise<UserLoginResponse> {
     return this.authService.signIn(user.email, user.id);
   }
 
