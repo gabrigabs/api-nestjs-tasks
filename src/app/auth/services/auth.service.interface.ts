@@ -1,6 +1,6 @@
 import { User } from '@prisma/client';
 import { UserDto } from '../dtos/user.dto';
-import { UserLoginResponse } from 'src/app/commons/interfaces/user.interface';
+import { UserLoginResponse } from '../../commons/interfaces/user.interface';
 
 export interface AuthServiceInterface {
   validateUser({
