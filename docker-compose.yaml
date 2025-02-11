@@ -1,0 +1,32 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: development
+    volumes:
+      - .:/app
+    restart: always
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgres
+    networks:
+      - postgres-network
+    env_file:
+      - .env
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: 'docker'
+      POSTGRES_USER: 'docker'
+      POSTGRES_DB: tasksdb
+    ports:
+      - '5432:5432'
+    networks:
+      - postgres-network
+
+networks:
+  postgres-network:
+    driver: bridge
