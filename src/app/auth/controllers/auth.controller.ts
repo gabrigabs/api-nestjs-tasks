@@ -5,9 +5,10 @@ import { UserSession } from '../../commons/decorators/user.decorator';
 import { User } from '@prisma/client';
 import { UserAuthGuard } from '../guards/user-auth.guard';
 import { UserLoginResponse } from '../../commons/interfaces/user.interface';
+import { AuthControllerInterface } from './auth.controller.interface';
 
 @Controller('auth')
-export class AuthController {
+export class AuthController implements AuthControllerInterface {
   constructor(private authService: AuthService) {}
 
   @UseGuards(UserAuthGuard)

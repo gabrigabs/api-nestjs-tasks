@@ -8,9 +8,10 @@ import {
   hashPassword,
   verifyPassword,
 } from '../../commons/utils/password.util';
+import { AuthServiceInterface } from './auth.service.interface';
 
 @Injectable()
-export class AuthService {
+export class AuthService implements AuthServiceInterface {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
