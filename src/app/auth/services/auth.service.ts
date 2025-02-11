@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UsersService } from '../../users/services/users.service';
-import { UserLoginResponse } from '../../commons/types/user-login-response.type';
+import { UserLoginResponse } from '../../commons/interfaces/user.interface';
 import { UserDto } from '../dtos/user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';

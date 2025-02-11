@@ -4,7 +4,7 @@ import { UserDto } from '../dtos/user.dto';
 import { UserSession } from '../../commons/decorators/user.decorator';
 import { User } from '@prisma/client';
 import { UserAuthGuard } from '../guards/user-auth.guard';
-import { UserLoginResponse } from '../../commons/types/user-login-response.type';
+import { UserLoginResponse } from '../../commons/interfaces/user.interface';
 
 @Controller('auth')
 export class AuthController {
