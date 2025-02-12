@@ -6,6 +6,6 @@ export interface TasksRepositoryInterface {
   createTask(data: CreateTaskDto, userId: string): Promise<Task>;
   findTasks(): Promise<Task[]>;
   updateTask(data: UpdateTaskDto, id: string): Promise<Task>;
-  deleteTask(id: string): Promise<Task>;
+  deleteTask(id: string): Promise<void>;
   findTaskByParams(params: Partial<Task>): Promise<Task | null>;
 }

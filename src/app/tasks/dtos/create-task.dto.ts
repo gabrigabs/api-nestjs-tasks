@@ -1,5 +1,4 @@
-import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
-import { TaskStatus } from '../../commons/enums/task-status.enum';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateTaskDto {
   @IsString()
@@ -9,9 +8,4 @@ export class CreateTaskDto {
   @IsString()
   @IsNotEmpty()
   description: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @IsEnum(TaskStatus)
-  status: string;
 }
