@@ -1,16 +1,14 @@
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { UsersService } from '../../users/services/users.service';
-import {
-  UserLoginResponse,
-  UserWithoutPassword,
-} from '../../commons/interfaces/user.interface';
-import { UserDto } from '../dtos/user.dto';
+import { UserWithoutPassword } from '../../commons/interfaces/user.interface';
+import { UserRequestDto } from '../dtos/requests/user-request.dto';
 import { JwtService } from '@nestjs/jwt';
 import {
   hashPassword,
   verifyPassword,
 } from '../../commons/utils/password.util';
 import { AuthServiceInterface } from './auth.service.interface';
+import { UserLoginResponseDto } from '../dtos/responses/user-login.response.dto';
 
 @Injectable()
 export class AuthService implements AuthServiceInterface {
@@ -24,7 +22,7 @@ export class AuthService implements AuthServiceInterface {
   async validateUser({
     email,
     password,
-  }: UserDto): Promise<UserWithoutPassword | null> {
+  }: UserRequestDto): Promise<UserWithoutPassword | null> {
     this.logger.log(`Validating user with email: ${email}`);
     const user = await this.usersService.getUserByParams({ email });
 
@@ -46,7 +44,7 @@ export class AuthService implements AuthServiceInterface {
     };
   }
 
-  async signUp(user: UserDto): Promise<UserLoginResponse> {
+  async signUp(user: UserRequestDto): Promise<UserLoginResponseDto> {
     this.logger.log(`Signing up new user with email: ${user.email}`);
     const userExists = await this.usersService.getUserByParams({
       email: user.email,
@@ -66,7 +64,7 @@ export class AuthService implements AuthServiceInterface {
     return this.signIn(newUser.email, newUser.id);
   }
 
-  async signIn(email: string, id: string): Promise<UserLoginResponse> {
+  async signIn(email: string, id: string): Promise<UserLoginResponseDto> {
     this.logger.log(`Signing in user: ${email}`);
     const payload = { email, id };
     const accessToken = await this.jwtService.signAsync(payload);
