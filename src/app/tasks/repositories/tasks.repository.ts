@@ -9,7 +9,7 @@ import { PrismaService } from '../../prisma/services/prisma.service';
 export class TasksRepository implements TasksRepositoryInterface {
   constructor(private prismaService: PrismaService) {}
 
-  async createTask(data: CreateTaskDto, userId: string): Promise<Task> {
+  createTask(data: CreateTaskDto, userId: string): Promise<Task> {
     return this.prismaService.task.create({ data: { ...data, userId } });
   }
 
