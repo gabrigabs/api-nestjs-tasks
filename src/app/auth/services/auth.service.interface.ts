@@ -1,12 +1,14 @@
-import { User } from '@prisma/client';
 import { UserDto } from '../dtos/user.dto';
-import { UserLoginResponse } from '../../commons/interfaces/user.interface';
+import {
+  UserLoginResponse,
+  UserWithoutPassword,
+} from '../../commons/interfaces/user.interface';
 
 export interface AuthServiceInterface {
   validateUser({
     email,
     password,
-  }: UserDto): Promise<Omit<User, 'password'> | null>;
+  }: UserDto): Promise<UserWithoutPassword | null>;
   signUp(user: UserDto): Promise<UserLoginResponse>;
   signIn(email: string, id: string): Promise<UserLoginResponse>;
 }

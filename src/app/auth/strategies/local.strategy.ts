@@ -2,7 +2,7 @@ import { Strategy } from 'passport-local';
 import { PassportStrategy } from '@nestjs/passport';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { AuthService } from '../services/auth.service';
-import { User } from '@prisma/client';
+import { UserWithoutPassword } from '../../commons/interfaces/user.interface';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
@@ -13,7 +13,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   async validate(
     email: string,
     password: string,
-  ): Promise<Omit<User, 'password'>> {
+  ): Promise<UserWithoutPassword> {
     const user = await this.authService.validateUser({ email, password });
 
     if (!user) {

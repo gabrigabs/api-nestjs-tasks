@@ -1,9 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UsersService } from '../../users/services/users.service';
-import { UserLoginResponse } from '../../commons/interfaces/user.interface';
+import {
+  UserLoginResponse,
+  UserWithoutPassword,
+} from '../../commons/interfaces/user.interface';
 import { UserDto } from '../dtos/user.dto';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '@prisma/client';
 import {
   hashPassword,
   verifyPassword,
@@ -20,7 +22,7 @@ export class AuthService implements AuthServiceInterface {
   async validateUser({
     email,
     password,
-  }: UserDto): Promise<Omit<User, 'password'> | null> {
+  }: UserDto): Promise<UserWithoutPassword | null> {
     const user = await this.usersService.getUserByParams({ email });
 
     if (!user) {
