@@ -21,7 +21,10 @@ export class TasksService implements TasksServiceInterface {
     const task = await this.tasksRepository.findTaskByParams({ id });
 
     if (!task) {
-      throw new HttpException('Task not found', HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        'Provided task id does not exists!',
+        HttpStatus.NOT_FOUND,
+      );
     }
 
     return task;
@@ -32,24 +35,23 @@ export class TasksService implements TasksServiceInterface {
     id: string,
     userId: string,
   ): Promise<Task> {
-    await this.verifyIfTaskBelongsToUser(id, userId);
+    const task = await this.findTaskById(id);
+
+    this.verifyIfTaskBelongsToUser(task, userId);
 
     return this.tasksRepository.updateTask(data, id);
   }
 
   async deleteTask(id: string, userId: string): Promise<void> {
-    await this.verifyIfTaskBelongsToUser(id, userId);
+    const task = await this.findTaskById(id);
+
+    this.verifyIfTaskBelongsToUser(task, userId);
 
     await this.tasksRepository.deleteTask(id);
   }
 
-  private async verifyIfTaskBelongsToUser(
-    id: string,
-    userId: string,
-  ): Promise<void> {
-    const task = await this.tasksRepository.findTaskByParams({ id, userId });
-
-    if (!task) {
+  private verifyIfTaskBelongsToUser(task: Task, userId: string): void {
+    if (task.userId !== userId) {
       throw new HttpException(
         'Provided task id does not belongs to user!',
         HttpStatus.BAD_REQUEST,
