@@ -1,29 +1,31 @@
 import { Injectable } from '@nestjs/common';
 import { TasksRepositoryInterface } from './tasks.repository.interface';
 import { Task } from '@prisma/client';
+import { CreateTaskDto } from '../dtos/create-task.dto';
+import { UpdateTaskDto } from '../dtos/update-task.dto';
+import { PrismaService } from '../../prisma/services/prisma.service';
 
 @Injectable()
-export class TasksService implements TasksRepositoryInterface {
-  createTask(data: {
-    title: string;
-    description: string;
-    userId: string;
-  }): Promise<Task> {
-    throw new Error('Method not implemented.');
+export class TasksRepository implements TasksRepositoryInterface {
+  constructor(private prismaService: PrismaService) {}
+
+  async createTask(data: CreateTaskDto, userId: string): Promise<Task> {
+    return this.prismaService.task.create({ data: { ...data, userId } });
   }
+
   findTasks(): Promise<Task[]> {
-    throw new Error('Method not implemented.');
+    return this.prismaService.task.findMany();
   }
-  updateTask(
-    id: string,
-    data: { title?: string; description?: string; status?: string },
-  ): Promise<Task> {
-    throw new Error('Method not implemented.');
+
+  updateTask(data: UpdateTaskDto, id: string): Promise<Task> {
+    return this.prismaService.task.update({ data, where: { id } });
   }
+
   deleteTask(id: string): Promise<Task> {
-    throw new Error('Method not implemented.');
+    return this.prismaService.task.delete({ where: { id } });
   }
+
   findTaskByParams(params: Partial<Task>): Promise<Task | null> {
-    throw new Error('Method not implemented.');
+    return this.prismaService.task.findFirst({ where: params });
   }
 }
