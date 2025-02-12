@@ -1,17 +1,17 @@
 import { Task } from '@prisma/client';
-import { CreateTaskDto } from '../dtos/create-task.dto';
-import { UpdateTaskDto } from '../dtos/update-task.dto';
+import { CreateTaskRequestDto } from '../dtos/requests/create-task-request.dto';
+import { UpdateTaskRequestDto } from '../dtos/requests/update-task-request.dto';
 import { UserWithoutPassword } from '../../commons/interfaces/user.interface';
-import { PaginatedTasks } from '../../commons/interfaces/tasks.interface';
-import { FindTasksQueryDto } from '../dtos/find-task-query.dto';
+import { FindTasksQueryRequestDto } from '../dtos/requests/find-task-query-request.dto';
+import { PaginatedTasksResponseDto } from '../dtos/responses/paginated-tasks-response.dto';
 
 export interface TasksControllerInterface {
-  addTask(body: CreateTaskDto, user: UserWithoutPassword): Promise<Task>;
-  getTasks(query: FindTasksQueryDto): Promise<PaginatedTasks>;
+  addTask(body: CreateTaskRequestDto, user: UserWithoutPassword): Promise<Task>;
+  getTasks(query: FindTasksQueryRequestDto): Promise<PaginatedTasksResponseDto>;
   getTaskById(id: string): Promise<Task | null>;
   updateTask(
     id: string,
-    body: UpdateTaskDto,
+    body: UpdateTaskRequestDto,
     user: UserWithoutPassword,
   ): Promise<Task>;
   deleteTask(id: string, user: UserWithoutPassword): Promise<void>;
