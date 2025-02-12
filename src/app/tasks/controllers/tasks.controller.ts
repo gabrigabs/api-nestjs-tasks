@@ -49,7 +49,7 @@ export class TasksController implements TasksControllerInterface {
   @Put('/:id')
   updateTask(
     @Param('id', new ParseUUIDPipe()) id: string,
-    body: UpdateTaskDto,
+    @Body() body: UpdateTaskDto,
     @UserSession() user: UserWithoutPassword,
   ): Promise<Task> {
     return this.tasksService.updateTask(body, id, user.id);
