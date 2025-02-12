@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger, HttpException, HttpStatus } from '@nestjs/common';
 import { TasksRepositoryInterface } from './tasks.repository.interface';
 import { Task } from '@prisma/client';
 import { CreateTaskDto } from '../dtos/create-task.dto';
@@ -9,12 +9,23 @@ import { TasksWithCount } from '../../commons/interfaces/tasks.interface';
 
 @Injectable()
 export class TasksRepository implements TasksRepositoryInterface {
+  private readonly logger = new Logger(TasksRepository.name);
+
   constructor(private prismaService: PrismaService) {}
 
-  createTask(data: CreateTaskDto, userId: string): Promise<Task> {
-    return this.prismaService.task.create({
-      data: { ...data, status: TaskStatus.PENDING, userId },
-    });
+  async createTask(data: CreateTaskDto, userId: string): Promise<Task> {
+    this.logger.log(`Creating task for userId: ${userId}`);
+    try {
+      return await this.prismaService.task.create({
+        data: { ...data, status: TaskStatus.PENDING, userId },
+      });
+    } catch (error) {
+      this.logger.error(`Failed to create task for userId: ${userId}`, error);
+      throw new HttpException(
+        'Internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   async findTasks(
@@ -22,27 +33,67 @@ export class TasksRepository implements TasksRepositoryInterface {
     take: number,
     where?: Partial<Task>,
   ): Promise<TasksWithCount> {
-    const [tasks, total] = await Promise.all([
-      this.prismaService.task.findMany({
-        skip,
-        take,
-        where,
-      }),
-      this.prismaService.task.count({ where }),
-    ]);
-
-    return { tasks, total };
+    this.logger.log(
+      `Finding all tasks skipping: ${skip}, taking: ${take} with params: ${JSON.stringify(where)}`,
+    );
+    try {
+      const [tasks, total] = await Promise.all([
+        this.prismaService.task.findMany({
+          skip,
+          take,
+          where,
+        }),
+        this.prismaService.task.count({ where }),
+      ]);
+      return { tasks, total };
+    } catch (error) {
+      this.logger.error('Failed to find tasks', error);
+      throw new HttpException(
+        'Internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
-  updateTask(data: UpdateTaskDto, id: string): Promise<Task> {
-    return this.prismaService.task.update({ data, where: { id } });
+  async updateTask(data: UpdateTaskDto, id: string): Promise<Task> {
+    this.logger.log(`Updating task with id: ${id}`);
+    try {
+      return await this.prismaService.task.update({ data, where: { id } });
+    } catch (error) {
+      this.logger.error(`Failed to update task with id: ${id}`, error);
+      throw new HttpException(
+        'Internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   async deleteTask(id: string): Promise<void> {
-    await this.prismaService.task.delete({ where: { id } });
+    this.logger.log(`Deleting task with id: ${id}`);
+    try {
+      await this.prismaService.task.delete({ where: { id } });
+    } catch (error) {
+      this.logger.error(`Failed to delete task with id: ${id}`, error);
+      throw new HttpException(
+        'Internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
-  findTaskByParams(params: Partial<Task>): Promise<Task | null> {
-    return this.prismaService.task.findFirst({ where: params });
+  async findTaskByParams(params: Partial<Task>): Promise<Task | null> {
+    this.logger.log(`Finding task by params: ${JSON.stringify(params)}`);
+    try {
+      return await this.prismaService.task.findFirst({ where: params });
+    } catch (error) {
+      this.logger.error(
+        `Failed to find task params: ${JSON.stringify(params)}`,
+        error,
+      );
+      throw new HttpException(
+        'Internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }
