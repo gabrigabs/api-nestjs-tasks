@@ -1,8 +1,8 @@
 import { Injectable, Logger, HttpException, HttpStatus } from '@nestjs/common';
 import { TasksRepositoryInterface } from './tasks.repository.interface';
 import { Task } from '@prisma/client';
-import { CreateTaskDto } from '../dtos/create-task.dto';
-import { UpdateTaskDto } from '../dtos/update-task.dto';
+import { CreateTaskRequestDto } from '../dtos/requests/create-task-request.dto';
+import { UpdateTaskRequestDto } from '../dtos/requests/update-task-request.dto';
 import { PrismaService } from '../../prisma/services/prisma.service';
 import { TaskStatus } from '../../commons/enums/task-status.enum';
 import { TasksWithCount } from '../../commons/interfaces/tasks.interface';
@@ -13,7 +13,7 @@ export class TasksRepository implements TasksRepositoryInterface {
 
   constructor(private prismaService: PrismaService) {}
 
-  async createTask(data: CreateTaskDto, userId: string): Promise<Task> {
+  async createTask(data: CreateTaskRequestDto, userId: string): Promise<Task> {
     this.logger.log(`Creating task for userId: ${userId}`);
     try {
       return await this.prismaService.task.create({
@@ -55,7 +55,7 @@ export class TasksRepository implements TasksRepositoryInterface {
     }
   }
 
-  async updateTask(data: UpdateTaskDto, id: string): Promise<Task> {
+  async updateTask(data: UpdateTaskRequestDto, id: string): Promise<Task> {
     this.logger.log(`Updating task with id: ${id}`);
     try {
       return await this.prismaService.task.update({ data, where: { id } });

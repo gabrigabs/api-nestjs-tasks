@@ -1,10 +1,10 @@
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { TasksServiceInterface } from './tasks.service.interface';
 import { Task } from '@prisma/client';
-import { CreateTaskDto } from '../dtos/create-task.dto';
-import { UpdateTaskDto } from '../dtos/update-task.dto';
+import { CreateTaskRequestDto } from '../dtos/requests/create-task-request.dto';
+import { UpdateTaskRequestDto } from '../dtos/requests/update-task-request.dto';
 import { TasksRepository } from '../repositories/tasks.repository';
-import { FindTasksQueryDto } from '../dtos/find-task-query.dto';
+import { FindTasksQueryRequestDto } from '../dtos/requests/find-task-query-request.dto';
 import { PaginatedTasks } from '../../commons/interfaces/tasks.interface';
 
 @Injectable()
@@ -13,13 +13,13 @@ export class TasksService implements TasksServiceInterface {
 
   constructor(private tasksRepository: TasksRepository) {}
 
-  async createTask(data: CreateTaskDto, userId: string): Promise<Task> {
+  async createTask(data: CreateTaskRequestDto, userId: string): Promise<Task> {
     this.logger.log(`Creating task for user ${userId}`);
     const task = await this.tasksRepository.createTask(data, userId);
     return task;
   }
 
-  async findTasks(query: FindTasksQueryDto): Promise<PaginatedTasks> {
+  async findTasks(query: FindTasksQueryRequestDto): Promise<PaginatedTasks> {
     this.logger.log(`Finding tasks with query params ${JSON.stringify(query)}`);
     const { skip, take, where } = this.mountPaginateAndSearchParams(query);
 
@@ -48,7 +48,7 @@ export class TasksService implements TasksServiceInterface {
   }
 
   async updateTask(
-    data: UpdateTaskDto,
+    data: UpdateTaskRequestDto,
     id: string,
     userId: string,
   ): Promise<Task> {
@@ -82,7 +82,7 @@ export class TasksService implements TasksServiceInterface {
     }
   }
 
-  private mountPaginateAndSearchParams(params: FindTasksQueryDto) {
+  private mountPaginateAndSearchParams(params: FindTasksQueryRequestDto) {
     const { page = 1, limit = 10, status } = params;
 
     const skip = (page - 1) * limit;
@@ -97,7 +97,7 @@ export class TasksService implements TasksServiceInterface {
   }
 
   private mountPaginatedTasksResponse(
-    query: FindTasksQueryDto,
+    query: FindTasksQueryRequestDto,
     tasks: Task[],
     total: number,
   ) {
