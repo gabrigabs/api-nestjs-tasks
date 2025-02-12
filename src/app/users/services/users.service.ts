@@ -11,10 +11,6 @@ export class UsersService implements UsersServiceInterface {
     return this.usersRepository.createUser(data);
   }
 
-  async getUsers() {
-    return this.usersRepository.findUsers();
-  }
-
   async getUserByParams(params: Partial<User>) {
     return this.usersRepository.findUserByParams(params);
   }

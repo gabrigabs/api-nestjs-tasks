@@ -27,19 +27,6 @@ export class UsersRepository implements UsersRepositoryInterface {
     }
   }
 
-  async findUsers(): Promise<User[]> {
-    this.logger.log('Finding all users');
-    try {
-      return await this.prisma.user.findMany();
-    } catch (error) {
-      this.logger.error(`Failed to find users`, error);
-      throw new HttpException(
-        'Internal server error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
-  }
-
   async findUserByParams(params: Partial<User>): Promise<User | null> {
     this.logger.log(`Finding user by params:  ${JSON.stringify(params)}`);
     try {
