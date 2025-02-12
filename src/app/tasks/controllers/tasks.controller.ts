@@ -7,6 +7,7 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { TasksControllerInterface } from './tasks.controllers.interface';
@@ -17,6 +18,8 @@ import { TasksService } from '../services/tasks.service';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { UserSession } from '../../commons/decorators/user.decorator';
 import { UserWithoutPassword } from '../../commons/interfaces/user.interface';
+import { PaginatedTasks } from '../../commons/interfaces/tasks.interface';
+import { FindTasksQueryDto } from '../dtos/find-task-query.dto';
 
 @Controller('tasks')
 export class TasksController implements TasksControllerInterface {
@@ -33,8 +36,8 @@ export class TasksController implements TasksControllerInterface {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  getTasks(): Promise<Task[]> {
-    return this.tasksService.findTasks();
+  getTasks(@Query() query: FindTasksQueryDto): Promise<PaginatedTasks> {
+    return this.tasksService.findTasks(query);
   }
 
   @UseGuards(JwtAuthGuard)

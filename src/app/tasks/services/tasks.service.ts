@@ -4,6 +4,8 @@ import { Task } from '@prisma/client';
 import { CreateTaskDto } from '../dtos/create-task.dto';
 import { UpdateTaskDto } from '../dtos/update-task.dto';
 import { TasksRepository } from '../repositories/tasks.repository';
+import { FindTasksQueryDto } from '../dtos/find-task-query.dto';
+import { PaginatedTasks } from '../../commons/interfaces/tasks.interface';
 
 @Injectable()
 export class TasksService implements TasksServiceInterface {
@@ -13,8 +15,16 @@ export class TasksService implements TasksServiceInterface {
     return this.tasksRepository.createTask(data, userId);
   }
 
-  findTasks(): Promise<Task[]> {
-    return this.tasksRepository.findTasks();
+  async findTasks(query: FindTasksQueryDto): Promise<PaginatedTasks> {
+    const { skip, take, where } = this.mountPaginateAndSearchParams(query);
+
+    const { tasks, total } = await this.tasksRepository.findTasks(
+      skip,
+      take,
+      where,
+    );
+
+    return this.mountPaginatedTasksResponse(query, tasks, total);
   }
 
   async findTaskById(id: string): Promise<Task> {
@@ -57,5 +67,33 @@ export class TasksService implements TasksServiceInterface {
         HttpStatus.BAD_REQUEST,
       );
     }
+  }
+
+  private mountPaginateAndSearchParams(params: FindTasksQueryDto) {
+    const { page = 1, limit = 10, status } = params;
+
+    const skip = (page - 1) * limit;
+
+    const where = status ? { status } : {};
+
+    return {
+      skip,
+      take: limit,
+      where,
+    };
+  }
+
+  private mountPaginatedTasksResponse(
+    query: FindTasksQueryDto,
+    tasks: Task[],
+    total: number,
+  ) {
+    const { page = 1, limit = 10 } = query;
+    return {
+      data: tasks,
+      page,
+      totalPages: Math.ceil(total / limit),
+      total,
+    };
   }
 }

@@ -5,6 +5,7 @@ import { CreateTaskDto } from '../dtos/create-task.dto';
 import { UpdateTaskDto } from '../dtos/update-task.dto';
 import { PrismaService } from '../../prisma/services/prisma.service';
 import { TaskStatus } from '../../commons/enums/task-status.enum';
+import { TasksWithCount } from '../../commons/interfaces/tasks.interface';
 
 @Injectable()
 export class TasksRepository implements TasksRepositoryInterface {
@@ -16,8 +17,21 @@ export class TasksRepository implements TasksRepositoryInterface {
     });
   }
 
-  findTasks(): Promise<Task[]> {
-    return this.prismaService.task.findMany();
+  async findTasks(
+    skip: number,
+    take: number,
+    where?: Partial<Task>,
+  ): Promise<TasksWithCount> {
+    const [tasks, total] = await Promise.all([
+      this.prismaService.task.findMany({
+        skip,
+        take,
+        where,
+      }),
+      this.prismaService.task.count({ where }),
+    ]);
+
+    return { tasks, total };
   }
 
   updateTask(data: UpdateTaskDto, id: string): Promise<Task> {
