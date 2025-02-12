@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { TasksServiceInterface } from './tasks.service.interface';
 import { Task } from '@prisma/client';
 import { CreateTaskDto } from '../dtos/create-task.dto';
@@ -9,13 +9,18 @@ import { PaginatedTasks } from '../../commons/interfaces/tasks.interface';
 
 @Injectable()
 export class TasksService implements TasksServiceInterface {
+  private readonly logger = new Logger(TasksService.name);
+
   constructor(private tasksRepository: TasksRepository) {}
 
-  createTask(data: CreateTaskDto, userId: string): Promise<Task> {
-    return this.tasksRepository.createTask(data, userId);
+  async createTask(data: CreateTaskDto, userId: string): Promise<Task> {
+    this.logger.log(`Creating task for user ${userId}`);
+    const task = await this.tasksRepository.createTask(data, userId);
+    return task;
   }
 
   async findTasks(query: FindTasksQueryDto): Promise<PaginatedTasks> {
+    this.logger.log(`Finding tasks with query params ${JSON.stringify(query)}`);
     const { skip, take, where } = this.mountPaginateAndSearchParams(query);
 
     const { tasks, total } = await this.tasksRepository.findTasks(
@@ -24,19 +29,21 @@ export class TasksService implements TasksServiceInterface {
       where,
     );
 
-    return this.mountPaginatedTasksResponse(query, tasks, total);
+    const response = this.mountPaginatedTasksResponse(query, tasks, total);
+    return response;
   }
 
   async findTaskById(id: string): Promise<Task> {
+    this.logger.log(`Finding task by id: ${id}`);
     const task = await this.tasksRepository.findTaskByParams({ id });
 
     if (!task) {
+      this.logger.warn(`Task with id: ${id} not found`);
       throw new HttpException(
         'Provided task id does not exists!',
         HttpStatus.NOT_FOUND,
       );
     }
-
     return task;
   }
 
@@ -45,14 +52,17 @@ export class TasksService implements TasksServiceInterface {
     id: string,
     userId: string,
   ): Promise<Task> {
+    this.logger.log(`Updating task id: ${id} for userId: ${userId}`);
     const task = await this.findTaskById(id);
 
     this.verifyIfTaskBelongsToUser(task, userId);
 
-    return this.tasksRepository.updateTask(data, id);
+    const updatedTask = await this.tasksRepository.updateTask(data, id);
+    return updatedTask;
   }
 
   async deleteTask(id: string, userId: string): Promise<void> {
+    this.logger.log(`Deleting task id: ${id} for userId: ${userId}`);
     const task = await this.findTaskById(id);
 
     this.verifyIfTaskBelongsToUser(task, userId);
@@ -62,6 +72,9 @@ export class TasksService implements TasksServiceInterface {
 
   private verifyIfTaskBelongsToUser(task: Task, userId: string): void {
     if (task.userId !== userId) {
+      this.logger.warn(
+        `Task id: ${task.id} does not belong to userId: ${userId}`,
+      );
       throw new HttpException(
         'Provided task id does not belongs to user!',
         HttpStatus.BAD_REQUEST,
