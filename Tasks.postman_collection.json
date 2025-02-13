@@ -1,0 +1,294 @@
+{
+	"info": {
+		"_postman_id": "636628a5-93b5-43ad-8e70-838f91f807ec",
+		"name": "Tasks",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17451303"
+	},
+	"item": [
+		{
+			"name": "Sign In",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"teste@teste.com\",\r\n    \"password\":\"teste\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/auth/sign-in",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"sign-in"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sign up",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"teste@teste.com\",\r\n    \"password\":\"teste\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/auth/sign-up",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"sign-up"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Task",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RlMkB0ZXN0ZS5jb20iLCJpZCI6IjY4NTAyODEyLWM3NjQtNDQ5NS04NTIxLTU5MTgwNzU2YzZjNSIsImlhdCI6MTczOTQxMDkwMiwiZXhwIjoxNzM5NDE2OTAyfQ.tnIzcusbzZTV06X2KETrKYG_-xw8Hc4Ue6IsZjC_AEM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"Teste 3\",\r\n    \"description\":\"Descrição\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/tasks",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"tasks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all Tasks",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RlMkB0ZXN0ZS5jb20iLCJpZCI6IjY4NTAyODEyLWM3NjQtNDQ5NS04NTIxLTU5MTgwNzU2YzZjNSIsImlhdCI6MTczOTQxMDkwMiwiZXhwIjoxNzM5NDE2OTAyfQ.tnIzcusbzZTV06X2KETrKYG_-xw8Hc4Ue6IsZjC_AEM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/tasks",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"tasks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Task by id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RlMkB0ZXN0ZS5jb20iLCJpZCI6IjY4NTAyODEyLWM3NjQtNDQ5NS04NTIxLTU5MTgwNzU2YzZjNSIsImlhdCI6MTczOTQxMDkwMiwiZXhwIjoxNzM5NDE2OTAyfQ.tnIzcusbzZTV06X2KETrKYG_-xw8Hc4Ue6IsZjC_AEM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/tasks/4e374805-b6fc-4491-96ae-2fcd1650a24f",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"tasks",
+						"4e374805-b6fc-4491-96ae-2fcd1650a24f"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update task by id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RlMkB0ZXN0ZS5jb20iLCJpZCI6IjY4NTAyODEyLWM3NjQtNDQ5NS04NTIxLTU5MTgwNzU2YzZjNSIsImlhdCI6MTczOTQxMDkwMiwiZXhwIjoxNzM5NDE2OTAyfQ.tnIzcusbzZTV06X2KETrKYG_-xw8Hc4Ue6IsZjC_AEM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"status\":\"Em Andamento\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/tasks/4bf2b67c-48c2-4ad0-b57e-f7c7cc42fa30",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"tasks",
+						"4bf2b67c-48c2-4ad0-b57e-f7c7cc42fa30"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete task by id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RlMkB0ZXN0ZS5jb20iLCJpZCI6IjY4NTAyODEyLWM3NjQtNDQ5NS04NTIxLTU5MTgwNzU2YzZjNSIsImlhdCI6MTczOTQxMDkwMiwiZXhwIjoxNzM5NDE2OTAyfQ.tnIzcusbzZTV06X2KETrKYG_-xw8Hc4Ue6IsZjC_AEM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"status\":\"Em Andamento\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/tasks/5c74b13b-f543-49d7-b602-7a57efa1795c",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"tasks",
+						"5c74b13b-f543-49d7-b602-7a57efa1795c"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
