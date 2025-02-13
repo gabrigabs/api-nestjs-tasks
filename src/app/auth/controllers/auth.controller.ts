@@ -15,6 +15,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import { ErrorResponseDto } from '../../commons/dtos/error-response.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -29,9 +30,18 @@ export class AuthController implements AuthControllerInterface {
   })
   @ApiBody({ type: UserRequestDto })
   @ApiCreatedResponse({ type: UserLoginResponseDto })
-  @ApiBadRequestResponse({ description: 'Validation Error' })
-  @ApiUnauthorizedResponse({ description: 'Invalid Credentials' })
-  @ApiInternalServerErrorResponse({ description: 'Internal server error' })
+  @ApiBadRequestResponse({
+    type: ErrorResponseDto,
+    description: 'Validation Error',
+  })
+  @ApiUnauthorizedResponse({
+    type: ErrorResponseDto,
+    description: 'Invalid Credentials',
+  })
+  @ApiInternalServerErrorResponse({
+    type: ErrorResponseDto,
+    description: 'Internal server error',
+  })
   @UseGuards(UserAuthGuard)
   @Post('sign-in')
   async signIn(@UserSession() user: User): Promise<UserLoginResponseDto> {
@@ -47,8 +57,14 @@ export class AuthController implements AuthControllerInterface {
   })
   @ApiBody({ type: UserRequestDto })
   @ApiCreatedResponse({ type: UserLoginResponseDto })
-  @ApiBadRequestResponse({ description: 'Validation Error' })
-  @ApiInternalServerErrorResponse({ description: 'Internal server error' })
+  @ApiBadRequestResponse({
+    type: ErrorResponseDto,
+    description: 'Validation Error',
+  })
+  @ApiInternalServerErrorResponse({
+    type: ErrorResponseDto,
+    description: 'Internal server error',
+  })
   @Post('sign-up')
   async signUp(@Body() body: UserRequestDto): Promise<UserLoginResponseDto> {
     this.logger.log(`New user signing up with email: ${body.email}`);

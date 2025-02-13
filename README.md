@@ -93,8 +93,6 @@ $ npm run test:e2e
 - Jest
 - Swagger/OpenAPI
 
-## Estrutura do Projeto
-
 
 ## Documentação da API
 
